@@ -3,38 +3,41 @@ name: CI/CD Pipeline
 # Executa em push para main e em pull requests
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    # 1. Checkout do código
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    # 2. Setup Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    # 3. Instalar dependências
-    - name: Install dependencies
-      run: npm ci
-    
-    # 4. Executar linting
-    - name: Run ESLint
-      run: npm run lint
-    
-    # 5. Executar build
-    - name: Build application
-      run: npm run build
-    
-    # 6. Executar testes (se tiveres)
-    - name: Run tests
-      run: npm test --if-present
+      # 1. Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      # 3. Instalar dependências
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Executar linting
+      - name: Run ESLint
+        run: npm run lint
+
+      # 5. Executar build com variáveis de ambiente
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      # 6. Executar testes (se tiveres)
+      - name: Run tests
+        run: npm test --if-present
