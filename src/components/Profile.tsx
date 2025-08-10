@@ -1,20 +1,32 @@
-import { createClient } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import {
-  Edit3, Save, X, Key, Mail, User, CreditCard, Shield, LogOut
-} from 'lucide-react';
+  Edit3,
+  Save,
+  X,
+  Key,
+  Mail,
+  User,
+  CreditCard,
+  Shield,
+  LogOut,
+} from "lucide-react";
 
-const Profile = ({ onClose }) => {
+type ProfileProps = {
+  onClose: () => void;
+};
+
+const Profile = ({ onClose }: ProfileProps) => {
   const router = useRouter();
   const supabase = createClient();
   const [profileData, setProfileData] = useState({
-    name: 'Pedro',
-    email: 'pedronevespnf@gmail.com',
-    nif: '123456789',
-    role: 'Gestor',
-    memberSince: 'Janeiro 2024',
-    profileImage: null
+    name: "Pedro",
+    email: "pedronevespnf@gmail.com",
+    nif: "123456789",
+    role: "Gestor",
+    memberSince: "Janeiro 2024",
+    profileImage: null,
   });
   const [editData, setEditData] = useState({ ...profileData });
   const [isEditing, setIsEditing] = useState(false);
@@ -33,12 +45,12 @@ const Profile = ({ onClose }) => {
   };
 
   const handleResetPassword = () => {
-    alert('Foi enviado um email para redefinir a sua senha.');
+    alert("Foi enviado um email para redefinir a sua senha.");
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/');
+    router.push("/");
   };
 
   return (
@@ -56,7 +68,11 @@ const Profile = ({ onClose }) => {
         <div className="flex items-center gap-6 mb-10">
           <div className="relative w-24 h-24 rounded-full border-4 border-white bg-gray-100 overflow-hidden shadow">
             {editData.profileImage ? (
-              <img src={editData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+              <img
+                src={editData.profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-100">
                 <User size={40} className="text-gray-400" />
@@ -64,7 +80,9 @@ const Profile = ({ onClose }) => {
             )}
           </div>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">{profileData.name}</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">
+              {profileData.name}
+            </h1>
             <p className="text-sm text-gray-500">{profileData.email}</p>
           </div>
         </div>
@@ -110,7 +128,7 @@ const Profile = ({ onClose }) => {
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-full bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90 disabled:opacity-50"
               >
                 <Save size={16} />
-                {isLoading ? 'Salvando...' : 'Salvar'}
+                {isLoading ? "Salvando..." : "Salvar"}
               </button>
             </>
           )}
@@ -120,13 +138,20 @@ const Profile = ({ onClose }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Nome */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nome Completo
+            </label>
             <div className="relative">
-              <User size={16} className="absolute top-3.5 left-3 text-gray-400" />
+              <User
+                size={16}
+                className="absolute top-3.5 left-3 text-gray-400"
+              />
               <input
                 type="text"
                 value={isEditing ? editData.name : profileData.name}
-                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, name: e.target.value })
+                }
                 disabled={!isEditing}
                 className="w-full pl-10 pr-4 py-3 bg-gray-100 text-gray-800 rounded-xl border-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -135,9 +160,14 @@ const Profile = ({ onClose }) => {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
             <div className="relative">
-              <Mail size={16} className="absolute top-3.5 left-3 text-gray-400" />
+              <Mail
+                size={16}
+                className="absolute top-3.5 left-3 text-gray-400"
+              />
               <input
                 type="email"
                 value={profileData.email}
@@ -149,13 +179,20 @@ const Profile = ({ onClose }) => {
 
           {/* NIF */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">NIF</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              NIF
+            </label>
             <div className="relative">
-              <CreditCard size={16} className="absolute top-3.5 left-3 text-gray-400" />
+              <CreditCard
+                size={16}
+                className="absolute top-3.5 left-3 text-gray-400"
+              />
               <input
                 type="text"
                 value={isEditing ? editData.nif : profileData.nif}
-                onChange={(e) => setEditData({ ...editData, nif: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, nif: e.target.value })
+                }
                 disabled={!isEditing}
                 className="w-full pl-10 pr-4 py-3 bg-gray-100 text-gray-800 rounded-xl border-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -164,7 +201,9 @@ const Profile = ({ onClose }) => {
 
           {/* Membro desde */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Membro desde</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Membro desde
+            </label>
             <input
               type="text"
               value={profileData.memberSince}
@@ -175,9 +214,14 @@ const Profile = ({ onClose }) => {
 
           {/* Role */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Função</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Função
+            </label>
             <div className="relative">
-              <Shield size={16} className="absolute top-3.5 left-3 text-gray-400" />
+              <Shield
+                size={16}
+                className="absolute top-3.5 left-3 text-gray-400"
+              />
               <input
                 type="text"
                 value={profileData.role}
