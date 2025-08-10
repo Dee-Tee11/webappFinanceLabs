@@ -1,7 +1,13 @@
 // src/contexts/AuthContext.tsx
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { User, Session, AuthError } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -44,6 +50,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const supabase = createClient();
 
+  const initializeAuth = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      // Verificar se há uma sessão válida
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error("Erro ao obter sessão:", error);
+        return;
+      }
+
+      if (session) {
+        setSession(session);
+        setUser(session.user);
+        console.log("Sessão restaurada para:", session.user.email);
+      } else {
+        console.log("Nenhuma sessão ativa encontrada");
+      }
+    } catch (error) {
+      console.error("Erro ao inicializar autenticação:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [supabase.auth]);
+
   useEffect(() => {
     // Inicializar autenticação
     initializeAuth();
@@ -82,36 +117,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [router, supabase.auth]);
-
-  const initializeAuth = async () => {
-    try {
-      setLoading(true);
-
-      // Verificar se há uma sessão válida
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
-      if (error) {
-        console.error("Erro ao obter sessão:", error);
-        return;
-      }
-
-      if (session) {
-        setSession(session);
-        setUser(session.user);
-        console.log("Sessão restaurada para:", session.user.email);
-      } else {
-        console.log("Nenhuma sessão ativa encontrada");
-      }
-    } catch (error) {
-      console.error("Erro ao inicializar autenticação:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [router, supabase.auth, initializeAuth]);
 
   const signIn = async (email: string, password: string) => {
     try {

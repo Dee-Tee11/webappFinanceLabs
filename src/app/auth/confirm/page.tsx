@@ -1,5 +1,6 @@
-import React from 'react';
-import { MailCheck } from 'lucide-react';
+import React from "react";
+import Link from "next/link";
+import { MailCheck } from "lucide-react";
 
 const SignUpConfirmationPage = () => {
   return (
@@ -12,15 +13,17 @@ const SignUpConfirmationPage = () => {
           Confirme o seu email
         </h2>
         <p className="mt-2 text-gray-600">
-          Enviámos um link de confirmação para o seu endereço de email. Por favor, verifique a sua caixa de entrada (e a pasta de spam) para completar o seu registo.
+          Enviámos um link de confirmação para o seu endereço de email. Por
+          favor, verifique a sua caixa de entrada (e a pasta de spam) para
+          completar o seu registo.
         </p>
         <div className="mt-6">
-          <a
+          <Link
             href="/"
             className="text-blue-600 hover:text-blue-500 font-medium"
           >
             Voltar à página inicial
-          </a>
+          </Link>
         </div>
       </div>
     </div>

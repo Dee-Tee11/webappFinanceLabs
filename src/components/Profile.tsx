@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
   Edit3,
@@ -68,9 +69,11 @@ const Profile = ({ onClose }: ProfileProps) => {
         <div className="flex items-center gap-6 mb-10">
           <div className="relative w-24 h-24 rounded-full border-4 border-white bg-gray-100 overflow-hidden shadow">
             {editData.profileImage ? (
-              <img
+              <Image
                 src={editData.profileImage}
                 alt="Profile"
+                width={96}
+                height={96}
                 className="w-full h-full object-cover"
               />
             ) : (
