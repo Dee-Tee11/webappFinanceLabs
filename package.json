@@ -17,6 +17,7 @@
     "next": "^14.2.30",
     "react": "^18",
     "react-dom": "^18",
+    "sharp": "^0.34.3",
     "supabase": "^2.30.4"
   },
   "devDependencies": {
