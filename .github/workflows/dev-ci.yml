@@ -1,6 +1,5 @@
 name: CI/CD Pipeline - Development
 
-# Executa em push para development e em pull requests
 on:
   push:
     branches: [development]
@@ -12,39 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout do código
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "npm"
 
-      # 3. Instalar dependências
       - name: Install dependencies
         run: npm ci
 
-      # 4. Executar linting
       - name: Run ESLint
         run: npm run lint
 
-      # 5. Executar build com variáveis de ambiente
-      - name: Build application
+      # (Opcional) podes remover este build; o Vercel vai construir abaixo
+      - name: Build application (local)
         run: npm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      # 6. Executar testes (se tiveres)
-      - name: Run tests
-        run: npm test --if-present
-
-      # 7. Deploy to Vercel
-      - name: Deploy to Vercel
-        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }}
+      # === Deploy Preview (nunca prod) ===
+      - name: Vercel pull (preview)
+        run: npx vercel pull --yes --environment=preview --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Vercel build
+        run: npx vercel build --token ${{ secrets.VERCEL_TOKEN }}
