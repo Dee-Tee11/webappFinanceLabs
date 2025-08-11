@@ -1,14 +1,14 @@
-name: CI/CD Pipeline - Production
+name: CI/CD Pipeline - Development
 
-# Executa em push para main e em pull requests
+# Executa em push para development e em pull requests
 on:
   push:
-    branches: [main]
+    branches: [development]
   pull_request:
-    branches: [main]
+    branches: [development]
 
 jobs:
-  deploy-to-production:
+  deploy-to-development:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +44,7 @@ jobs:
 
       # 7. Deploy to Vercel
       - name: Deploy to Vercel
-        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
